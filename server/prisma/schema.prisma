@@ -14,19 +14,21 @@ datasource db {
 }
 
 model Category {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique @db.VarChar(150)
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id        Int       @id @default(autoincrement())
+  name      String    @unique @db.VarChar(150)
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  Product   Product[]
 
   @@map("categories")
 }
 
 model Tag {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique @db.VarChar(150)
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id         Int          @id @default(autoincrement())
+  name       String       @unique @db.VarChar(150)
+  createdAt  DateTime     @default(now()) @map("created_at")
+  updatedAt  DateTime     @updatedAt @map("updated_at")
+  ProductTag ProductTag[]
 
   @@map("tags")
 }
@@ -38,4 +40,33 @@ enum Visibility {
   DEAL
 }
 
+model Product {
+  id          Int          @id @default(autoincrement())
+  name        String       @unique @db.VarChar(200)
+  slug        String       @unique @db.VarChar(200)
+  reference   String       @unique @default(uuid()) @db.VarChar(50)
+  description String?      @db.Text
+  Price       Float        @db.Float
+  isAvaiable  Boolean      @default(true) @map("is_available") @db.TinyInt
+  viewCount   Int          @default(0) @map("view_count") @db.Int
+  visibility  Visibility   @default(VISIBLE)
+  pictures    Json
+  extras      Json         @db.Json
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+  category    Category     @relation(fields: [categoryId], references: [id])
+  categoryId  Int          @map("category_id")
+  productTags ProductTag[]
 
+  @@map("products")
+}
+
+model ProductTag {
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int     @map("product_id")
+  tag       Tag     @relation(fields: [tagId], references: [id])
+  tagId     Int     @map("tag_id")
+
+  @@id([productId, tagId])
+  @@map("products-tags")
+}
