@@ -12,4 +12,4 @@ let connectDB = async () => {
   }
 };
 
-module.exports = { prisma, connectDB };
+module.exports = connectDB;
