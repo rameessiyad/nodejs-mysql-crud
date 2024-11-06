@@ -1,4 +1,4 @@
-#Node.js MySQL CRUD Application
+Node.js MySQL CRUD Application
 This is a Node.js CRUD (Create, Read, Update, Delete) application using MySQL as the database and Prisma as the ORM. The project provides a backend API to manage products and categories, featuring essential CRUD operations with a focus on maintainability, performance, and developer productivity.
 
 Features
